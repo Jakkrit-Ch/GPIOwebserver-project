@@ -210,7 +210,7 @@ io.sockets.on('connection', function (socket) {// WebSocket Connection
 	if (GPIO13value != LED13.readSync()) { //only change LED if status has changed
 	    LED13.writeSync(GPIO13value); //turn LED on or off
 	    console.log('Send new GPIO13 state to ALL clients');
-	    io.emit('GPIO13', GPIO16value); //send button status to ALL clients 
+	    io.emit('GPIO13', GPIO13value); //send button status to ALL clients 
 	};
 	
     });
