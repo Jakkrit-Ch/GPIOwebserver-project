@@ -4,16 +4,16 @@ var url = require('url');
 var path = require('path');
 var io = require('socket.io','net')(http) //require socket.io module and pass the http object (server)
 var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
-var LED6 = new Gpio(6, 'out'); //use GPIO pin 6 as output
-var LED13 = new Gpio(13, 'out'); //use GPIO pin 13 as output
-var LED22 = new Gpio(22, 'out'); //use GPIO pin 22 as output
-var LED27 = new Gpio(27, 'out'); //use GPIO pin 27 as output
+var LED26 = new Gpio(26, 'out'); //use GPIO pin 26 as output
+var LED20 = new Gpio(20, 'out'); //use GPIO pin 20 as output
+var LED21 = new Gpio(21, 'out'); //use GPIO pin 21 as output
+var LED16 = new Gpio(16, 'out'); //use GPIO pin 16 as output
 
 
-var GPIO6value = 0;  // Turn on the LED by default
-var GPIO13value = 0;  // Turn on the LED by default
-var GPIO22value = 1;  // Turn on the LED by default
-var GPIO27value = 1;  // Turn on the LED by default
+var GPIO26value = 0;  // Turn on the LED by default
+var GPIO20value = 0;  // Turn on the LED by default
+var GPIO21value = 1;  // Turn on the LED by default
+var GPIO16value = 1;  // Turn on the LED by default
 
 /****** CONSTANTS******************************************************/
 
@@ -33,15 +33,15 @@ const WebPort = 80;
 
 // Start http webserver
 http.listen(WebPort, function() {  // This gets call when the web server is first started.
-	LED6.writeSync(GPIO6value); //turn LED on or off
-	LED13.writeSync(GPIO13value); //turn LED on or off
-	LED22.writeSync(GPIO22value); //turn LED on or off
-	LED27.writeSync(GPIO27value); //turn LED on or off
+	LED26.writeSync(GPIO26value); //turn LED on or off
+	LED20.writeSync(GPIO20value); //turn LED on or off
+	LED21.writeSync(GPIO21value); //turn LED on or off
+	LED16.writeSync(GPIO16value); //turn LED on or off
 	console.log('Server running on Port '+WebPort);
-	console.log('GPIO6 = '+GPIO6value);
-	console.log('GPIO13 = '+GPIO13value);
-	console.log('GPIO22 = '+GPIO22value);
-	console.log('GPIO27 = '+GPIO27value);
+	console.log('GPIO26 = '+GPIO26value);
+	console.log('GPIO20 = '+GPIO20value);
+	console.log('GPIO21 = '+GPIO21value);
+	console.log('GPIO16 = '+GPIO16value);
 	} 
 ); 
 
@@ -106,17 +106,17 @@ function handler (req, res) {
 
 // Execute this when web server is terminated
 process.on('SIGINT', function () { //on ctrl+c
-  LED6.writeSync(0); // Turn LED off
-  LED6.unexport(); // Unexport LED GPIO to free resources
+  LED26.writeSync(0); // Turn LED off
+  LED26.unexport(); // Unexport LED GPIO to free resources
   
-  LED13.writeSync(0); // Turn LED off
-  LED13.unexport(); // Unexport LED GPIO to free resources
+  LED20.writeSync(0); // Turn LED off
+  LED20.unexport(); // Unexport LED GPIO to free resources
   
-  LED22.writeSync(0); // Turn LED off
-  LED22.unexport(); // Unexport LED GPIO to free resources
+  LED21.writeSync(0); // Turn LED off
+  LED21.unexport(); // Unexport LED GPIO to free resources
   
-  LED27.writeSync(0); // Turn LED off
-  LED27.unexport(); // Unexport LED GPIO to free resources
+  LED16.writeSync(0); // Turn LED off
+  LED16.unexport(); // Unexport LED GPIO to free resources
 
   process.exit(); //exit completely
 }); 
@@ -126,91 +126,91 @@ process.on('SIGINT', function () { //on ctrl+c
 
 io.sockets.on('connection', function (socket) {// WebSocket Connection
     console.log('A new client has connectioned. Send LED status');
-    socket.emit('GPIO6', GPIO6value);
-    socket.emit('GPIO13', GPIO13value);
-    socket.emit('GPIO22', GPIO22value);
-    socket.emit('GPIO27', GPIO27value);
+    socket.emit('GPIO26', GPIO26value);
+    socket.emit('GPIO20', GPIO20value);
+    socket.emit('GPIO21', GPIO21value);
+    socket.emit('GPIO16', GPIO16value);
     
-    // this gets called whenever client presses GPIO6 toggle light button
-    socket.on('GPIO6T', function(data) { 
-	if (GPIO6value) GPIO6value = 0;
-	else GPIO6value = 1;
-	console.log('new GPIO6 value='+GPIO6value);
-	LED6.writeSync(GPIO6value); //turn LED on or off
-	console.log('Send new GPIO6 state to ALL clients');
-	io.emit('GPIO6', GPIO6value); //send button status to ALL clients 
+    // this gets called whenever client presses GPIO26 toggle light button
+    socket.on('GPIO26T', function(data) { 
+	if (GPIO26value) GPIO26value = 0;
+	else GPIO26value = 1;
+	console.log('new GPIO26 value='+GPIO26value);
+	LED26.writeSync(GPIO26value); //turn LED on or off
+	console.log('Send new GPIO26 state to ALL clients');
+	io.emit('GPIO26', GPIO26value); //send button status to ALL clients 
     });
     
-    // this gets called whenever client presses GPIO13 toggle light button
-    socket.on('GPIO13T', function(data) { 
-	if (GPIO13value) GPIO13value = 0;
-	else GPIO13value = 1;
-	console.log('new GPIO13 value='+GPIO13value);
-	LED13.writeSync(GPIO13value); //turn LED on or off
-	console.log('Send new GPIO13 state to ALL clients');
-	io.emit('GPIO13', GPIO13value); //send button status to ALL clients 
+    // this gets called whenever client presses GPIO20 toggle light button
+    socket.on('GPIO20T', function(data) { 
+	if (GPIO20value) GPIO20value = 0;
+	else GPIO20value = 1;
+	console.log('new GPIO20 value='+GPIO20value);
+	LED20.writeSync(GPIO20value); //turn LED on or off
+	console.log('Send new GPIO20 state to ALL clients');
+	io.emit('GPIO20', GPIO20value); //send button status to ALL clients 
     });
     
-    // this gets called whenever client presses GPIO22 toggle light button
-    socket.on('GPIO22T', function(data) { 
-	if (GPIO22value) GPIO22value = 0;
-	else GPIO22value = 1;
-	console.log('new GPIO22 value='+GPIO22value);
-	LED22.writeSync(GPIO22value); //turn LED on or off
-	console.log('Send new GPIO22 state to ALL clients');
-	io.emit('GPIO22', GPIO22value); //send button status to ALL clients 	
+    // this gets called whenever client presses GPIO21 toggle light button
+    socket.on('GPIO21T', function(data) { 
+	if (GPIO21value) GPIO21value = 0;
+	else GPIO21value = 1;
+	console.log('new GPIO21 value='+GPIO21value);
+	LED21.writeSync(GPIO21value); //turn LED on or off
+	console.log('Send new GPIO21 state to ALL clients');
+	io.emit('GPIO21', GPIO21value); //send button status to ALL clients 	
     });
     
-    // this gets called whenever client presses GPIO27 toggle light button
-    socket.on('GPIO27T', function(data) { 
-	if (GPIO27value) GPIO27value = 0;
-	else GPIO27value = 1;
-	console.log('new GPIO27 value='+GPIO27value);
-	LED27.writeSync(GPIO27value); //turn LED on or off
-	console.log('Send new GPIO27 state to ALL clients');
-	io.emit('GPIO27', GPIO27value); //send button status to ALL clients 	
+    // this gets called whenever client presses GPIO16 toggle light button
+    socket.on('GPIO16T', function(data) { 
+	if (GPIO16value) GPIO16value = 0;
+	else GPIO16value = 1;
+	console.log('new GPIO16 value='+GPIO16value);
+	LED16.writeSync(GPIO16value); //turn LED on or off
+	console.log('Send new GPIO16 state to ALL clients');
+	io.emit('GPIO16', GPIO16value); //send button status to ALL clients 	
     });
 
     
-    // this gets called whenever client presses GPIO6 momentary light button
-    socket.on('GPIO6', function(data) { 
-	GPIO6value = data;
-	if (GPIO6value != LED6.readSync()) { //only change LED if status has changed
-	    LED6.writeSync(GPIO6value); //turn LED on or off
-	    console.log('Send new GPIO6 state to ALL clients');
-	    io.emit('GPIO6', GPIO6value); //send button status to ALL clients 
+    // this gets called whenever client presses GPIO26 momentary light button
+    socket.on('GPIO26', function(data) { 
+	GPIO26value = data;
+	if (GPIO26value != LED26.readSync()) { //only change LED if status has changed
+	    LED26.writeSync(GPIO26value); //turn LED on or off
+	    console.log('Send new GPIO26 state to ALL clients');
+	    io.emit('GPIO26', GPIO26value); //send button status to ALL clients 
 	};	
     });
     
-    // this gets called whenever client presses GPIO13 momentary light button
-    socket.on('GPIO13', function(data) { 
-	GPIO13value = data;
-	if (GPIO13value != LED13.readSync()) { //only change LED if status has changed
-	    LED13.writeSync(GPIO13value); //turn LED on or off
-	    console.log('Send new GPIO13 state to ALL clients');
-	    io.emit('GPIO13', GPIO13value); //send button status to ALL clients 
+    // this gets called whenever client presses GPIO20 momentary light button
+    socket.on('GPIO20', function(data) { 
+	GPIO20value = data;
+	if (GPIO20value != LED20.readSync()) { //only change LED if status has changed
+	    LED20.writeSync(GPIO20value); //turn LED on or off
+	    console.log('Send new GPIO20 state to ALL clients');
+	    io.emit('GPIO20', GPIO20value); //send button status to ALL clients 
 	};
 
     });
     
-    // this gets called whenever client presses GPIO22 momentary light button
-    socket.on('GPIO22', function(data) { 
-	GPIO22value = data;
-	if (GPIO22value != LED22.readSync()) { //only change LED if status has changed
-	    LED22.writeSync(GPIO22value); //turn LED on or off
-	    console.log('Send new GPIO22 state to ALL clients');
-	    io.emit('GPIO22', GPIO22value); //send button status to ALL clients e
+    // this gets called whenever client presses GPIO21 momentary light button
+    socket.on('GPIO21', function(data) { 
+	GPIO21value = data;
+	if (GPIO21value != LED21.readSync()) { //only change LED if status has changed
+	    LED21.writeSync(GPIO21value); //turn LED on or off
+	    console.log('Send new GPIO21 state to ALL clients');
+	    io.emit('GPIO21', GPIO21value); //send button status to ALL clients e
 	};
 
     });
     
-    // this gets called whenever client presses GPIO27 momentary light button
-    socket.on('GPIO27', function(data) { 
-	GPIO27value = data;
-	if (GPIO27value != LED27.readSync()) { //only change LED if status has changed
-	    LED27.writeSync(GPIO27value); //turn LED on or off
-	    console.log('Send new GPIO27 state to ALL clients');
-	    io.emit('GPIO27', GPIO27value); //send button status to ALL clients 
+    // this gets called whenever client presses GPIO16 momentary light button
+    socket.on('GPIO16', function(data) { 
+	GPIO16value = data;
+	if (GPIO16value != LED16.readSync()) { //only change LED if status has changed
+	    LED16.writeSync(GPIO16value); //turn LED on or off
+	    console.log('Send new GPIO16 state to ALL clients');
+	    io.emit('GPIO16', GPIO16value); //send button status to ALL clients 
 	};
 	
     });
