@@ -10,8 +10,8 @@ var LED22 = new Gpio(22, 'out'); //use GPIO pin 22 as output
 var LED27 = new Gpio(27, 'out'); //use GPIO pin 27 as output
 
 
-var GPIO6value = 0;  // Turn on the LED by default
-var GPIO13value = 0;  // Turn on the LED by default
+var GPIO6value = 1;  // Turn on the LED by default
+var GPIO13value = 1;  // Turn on the LED by default
 var GPIO22value = 1;  // Turn on the LED by default
 var GPIO27value = 1;  // Turn on the LED by default
 
@@ -37,6 +37,7 @@ http.listen(WebPort, function() {  // This gets call when the web server is firs
 	LED13.writeSync(GPIO13value); //turn LED on or off
 	LED22.writeSync(GPIO22value); //turn LED on or off
 	LED27.writeSync(GPIO27value); //turn LED on or off
+	
 	console.log('Server running on Port '+WebPort);
 	console.log('GPIO6 = '+GPIO6value);
 	console.log('GPIO13 = '+GPIO13value);

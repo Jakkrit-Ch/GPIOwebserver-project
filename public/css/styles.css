@@ -44,9 +44,6 @@
       margin-bottom: 15px;
    
       padding-bottom: 15px;
-      border: 1px solid black;
-      border-radius: 15px;
-      float: left;
       width: auto;
       min-width: 50px;
       padding: 5px;
@@ -155,14 +152,7 @@
              *This only works with certain web browser but useful for Safari and 
              * chrome on mobile touch screens*/
         
-   } 
-   
-   /*
-   button:hover {
-        color: red;
-        background-color: #ffffff;
-   }
-   */   
+   }  
    button:active {
         color: red;
         background-color: #ffffff;
