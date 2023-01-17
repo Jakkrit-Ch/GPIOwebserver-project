@@ -9,7 +9,6 @@ var LED13 = new Gpio(13, 'out'); //use GPIO pin 13 as output
 var LED22 = new Gpio(22, 'out'); //use GPIO pin 22 as output
 var LED27 = new Gpio(27, 'out'); //use GPIO pin 27 as output
 
-
 var GPIO6value = 0;  // Turn on the LED by default
 var GPIO13value = 0;  // Turn on the LED by default
 var GPIO22value = 0;  // Turn on the LED by default
@@ -54,6 +53,7 @@ function handler(req, res) {
 
 	// Initial content type
 	var contentType = 'text/html';
+
 	// Check ext and set content type
 	switch (extname) {
 		case '.js':
@@ -96,21 +96,17 @@ function handler(req, res) {
 process.on('SIGINT', function () { //on ctrl+c
 	LED6.writeSync(0); // Turn LED off
 	LED6.unexport(); // Unexport LED GPIO to free resources
-
 	LED13.writeSync(0); // Turn LED off
 	LED13.unexport(); // Unexport LED GPIO to free resources
-
 	LED22.writeSync(0); // Turn LED off
 	LED22.unexport(); // Unexport LED GPIO to free resources
-
 	LED27.writeSync(0); // Turn LED off
 	LED27.unexport(); // Unexport LED GPIO to free resources
-
 	process.exit(); //exit completely
-
 });
 
 /****** io.socket is the websocket connection to the client's browser********/
+
 io.sockets.on('connection', function (socket) {// WebSocket Connection
 	console.log('A new client has connectioned. Send LED status');
 	socket.emit('GPIO6', GPIO6value);
@@ -129,7 +125,6 @@ io.sockets.on('connection', function (socket) {// WebSocket Connection
 
 	// this gets called whenever client presses GPIO13 toggle light button
 	socket.on('GPIO13T', function (data) {
-		console.log('GPIO6 = ' + GPIO6value);
 		io.emit('GPIO13', GPIO13value); //send button status to ALL clients 
 		if (GPIO13value) GPIO13value = 0;
 		else GPIO13value = 1;
