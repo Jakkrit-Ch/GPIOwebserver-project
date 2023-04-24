@@ -1,19 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="GPIO Project">
     <title>Rasberry Pi GPIO</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="../images/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="../css/styles.css" />
 
     <style>
-	div.rgb {
-            background: rgba(255, 255, 255, 65%);
+        div.rgb {
+            background-image: url('https://img.freepik.com/premium-photo/white-painted-wall-illuminated-by-rainbowcolored-light-background-texture_136930-941.jpg?w=1380');
+            background-repeat: no-repeat;
+            background-size: cover;
+            /* background: rgba(255, 255, 255, 75%); */
             border-radius: 20px;
+            display: grid;
+            align-items: center;
+            font-family: Bangna New;
+            height: 300px;
+            width: 600px;
+            margin-top: auto;
+            margin-bottom: auto;
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
         }
+
+        div.temp {
+            background-image: url('https://img.freepik.com/premium-photo/yellow-color-cloth-pattern-backgroundgold-silk-wave-texture-design-holidays-travel-summer-card-bannerlight-gradient-yellow-fabric-smooth-shape-colorfulabstract-luxury-golden-template-wallpaper_301927-710.jpg?w=1060');
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: Bangna New;
+            border-radius: 20px;
+            height: 200px;
+            width: 280px;
+            justify-content: center;
+            margin-right: 20px;
+            padding: 40px;
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+
+        }
+
+        div.hum {
+            background-image: url('https://img.freepik.com/premium-photo/pure-clean-water-drop-white-background_262288-6540.jpg?w=996');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: right;
+            font-family: Bangna New;
+            border-radius: 20px;
+            height: 200px;
+            width: 280px;
+            justify-content: center;
+            margin-left: 2px;
+            padding: 40px;
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+
+        }
+
         .switch {
             position: relative;
             display: inline-block;
@@ -74,58 +119,78 @@
         }
 
         body {
-		background-image: url('https://wallpaperaccess.com/full/38585.jpg');
-              	background-repeat: no-repeat;
-              	background-size: cover;
+            background-image: url('https://img.freepik.com/premium-photo/abstract-blur-pastel-colour_66899-257.jpg?w=996');
+            background-repeat: no-repeat;
+            background-size: cover;
         }
-    </style>        
     </style>
 
-  </head>
+</head>
 
-<body>
-  
-	<div class="rgb py-5 mt-5" style="font-family: PK Krung Thep Medium; margin:auto; width:50%;">
-        <H1 class="text-center mb-3 text-uppercase text-muted">LED Controller</H1>
+<body style="height: 700px; display: grid; justify-content: center; align-items: center;">
 
-        <div class="container" style="display: flex; margin:auto; width: 50%;">
-
-            <div class="GpioContainer text-center" style="margin: auto;">
-                <h4 class="mb-2 text-uppercase text-muted">LED 1</h4>
-                <label class="switch">
-                <input type="checkbox" id="GPIO6">
-                <span class="slider round"></span>
+    <div>
+        <div style="display: flex; justify-content: center; margin-bottom: 10px;">
+            <div class="temp">
+                <h5><b>Temperature:</b></h5><br>
+                <h2 style="display: flex; justify-content: center;" class="temp_value"><b>24.5 C</b></h2>
             </div>
 
-            <div class="GpioContainer text-center" style="margin: auto;">
-                <h4 class="mb-2 text-uppercase text-muted">LED 2</h4>
-                <label class="switch">
-                <input type="checkbox" id="GPIO13">
-                <span class="slider round"></span>
+            <div class="hum">
+                <h5><b>Humidity:</b></h5><br>
+                <h2 style="display: flex; justify-content: center;" class="hum_value"><b>30.2 %</b></h2>
+            </div>
+        </div>
+
+        <div class="rgb">
+
+            <div style="height: 250px; display: grid; align-items: center;">
+                <!-- <H1 class="text-center mb-3 text-uppercase"><b>LED Controller</b></H1> -->
+
+                <div class="container" style="display: flex; width: 80%;">
+
+                    <div class="GpioContainer text-center" style="margin: auto; width: 100px; ">
+                        <h4 class="mb-2 text-uppercase"><b>LED 1</b></h4>
+                        <label class="switch">
+                            <input type="checkbox" id="GPIO6">
+                            <span class="slider round"></span>
+                    </div>
+
+                    <div class="GpioContainer text-center" style="margin: auto; width: 100px;">
+                        <h4 class="mb-2 text-uppercase"><b>LED 2</b></h4>
+                        <label class="switch">
+                            <input type="checkbox" id="GPIO13">
+                            <span class="slider round"></span>
+                    </div>
+
+                    <div class="GpioContainer text-center" style="margin: auto; width: 100px;">
+                        <h4 class="mb-2 text-uppercase"><b>LED 3</b></h4>
+                        <label class="switch">
+                            <input type="checkbox" id="GPIO22">
+                            <span class="slider round"></span>
+                    </div>
+
+                    <div class="GpioContainer text-center" style="margin: auto; width: 100px;">
+                        <h4 class="mb-2 text-uppercase"><b>LED 4</b></h4>
+                        <label class="switch">
+                            <input type="checkbox" id="GPIO27">
+                            <span class="slider round"></span>
+                    </div>
+
+                </div>
+
+                <div class="container">
+                    <a href="http://localhost:3000/" class="btn btn-danger mt-5"
+                        style=" display:block; margin-left:auto; margin-right:auto; width:30%; border-radius: 20px;"><b>BACK</b></a>
+                </div>
             </div>
 
-            <div class="GpioContainer text-center" style="margin: auto;">
-                <h4 class="mb-2 text-uppercase text-muted">LED 3</h4>
-                <label class="switch">
-                <input type="checkbox" id="GPIO22">
-                <span class="slider round"></span>
-            </div>
 
-            <div class="GpioContainer text-center" style="margin: auto;">
-                <h4 class="mb-3 text-uppercase text-muted">LED 4</h4>
-                <label class="switch">
-                <input type="checkbox" id="GPIO27">
-                <span class="slider round"></span>
-            </div>
+            <script src="/socket.io/socket.io.js"></script>
+            <script src="main.js"></script>
 
         </div>
-	<div class="container">
-		<a href="http://localhost:3000/" class="btn btn-danger mt-5"
-                    style="display:block; margin-left:auto; margin-right:auto; width:30%;">Back</a>
-	</div>
-               <script src="/socket.io/socket.io.js"></script>
-               <script src="main.js"></script>
-    
-  </div>
+    </div>
 </body>
-</html> 
+
+</html>
