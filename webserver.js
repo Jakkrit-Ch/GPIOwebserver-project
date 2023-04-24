@@ -8,6 +8,7 @@ var LED6 = new Gpio(6, 'out'); //use GPIO pin 6 as output
 var LED13 = new Gpio(13, 'out'); //use GPIO pin 13 as output
 var LED22 = new Gpio(22, 'out'); //use GPIO pin 22 as output
 var LED27 = new Gpio(27, 'out'); //use GPIO pin 27 as output
+var sensorLib = require("node-dht-sensor");
 
 var GPIO6value = 0;  // Turn on the LED by default
 var GPIO13value = 0;  // Turn on the LED by default
@@ -114,6 +115,46 @@ io.sockets.on('connection', function (socket) {// WebSocket Connection
 	socket.emit('GPIO22', GPIO22value);
 	socket.emit('GPIO27', GPIO27value);
 
+	// DHT22 sensor
+
+	var dht22 = {
+		sensors: [
+			{
+				name: "Room 101",
+				type: 22,
+				pin: 10
+			}
+		],
+		read: function () {
+			for (var sensor in this.sensors) {
+				var readout = sensorLib.read(
+					this.sensors[sensor].type,
+					this.sensors[sensor].pin
+				);
+				var temp = readout.temperature.toFixed(1)
+				var hum = readout.humidity.toFixed(1)
+				console.log(
+					`[${this.sensors[sensor].name}] ` +
+					`temperature: ${temp}°C, ` +
+					`humidity: ${hum}%`
+				);
+
+				socket.temp = readout.temperature.toFixed(1)
+				socket.hum = readout.humidity.toFixed(1)
+
+				socket.emit('change_value', {
+					temp: socket.temp,
+					hum: socket.hum
+				})
+			}
+			setTimeout(function () {
+				dht22.read();
+			}, 5000);
+		}
+	};
+
+	dht22.read();
+
 	// this gets called whenever client presses GPIO6 toggle light button
 	socket.on('GPIO6T', function (data) {
 		io.emit('GPIO6', GPIO6value); //send button status to ALL clients 
@@ -154,4 +195,7 @@ io.sockets.on('connection', function (socket) {// WebSocket Connection
 	socket.on('disconnect', function () {
 		console.log('A user disconnected');
 	});
+
+	//DHT22 sensor 
+
 });
