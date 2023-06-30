@@ -1,198 +1,139 @@
-<!DOCTYPE html>
-<html lang="en">
+/************PROCESS DATA TO/FROM Client****************************/
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="GPIO Project">
-    <title>Rasberry Pi GPIO</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="icon" type="image/png" href="../images/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="../css/styles.css" />
+var socket = io(); //load socket.io-client and connect to the host that serves the page
+window.addEventListener('load', function () {
+    document.addEventListener("mousedown", ReportMouseDown, false);
+    document.addEventListener("input", PwmInput, false);
+});
 
-    <style>
-        div.rgb {
-            background-image: url('https://img.freepik.com/premium-photo/white-painted-wall-illuminated-by-rainbowcolored-light-background-texture_136930-941.jpg?w=1380');
-            background-repeat: no-repeat;
-            background-size: cover;
-            /* background: rgba(255, 255, 255, 75%); */
-            border-radius: 20px;
-            display: grid;
-            align-items: center;
-            font-family: Bangna New;
-            height: 300px;
-            width: 600px;
-            margin-top: auto;
-            margin-bottom: auto;
-            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+let curTemp = document.querySelector('.temp_value');
+let curHum = document.querySelector('.hum_value');
+
+socket.on('change_value', data => {
+    curTemp.textContent = data.temp;
+    curHum.textContent = data.hum;
+})
+
+// PWM Process
+
+var slider6 = document.getElementById("PWM6");
+var output6 = document.getElementById("val6");
+socket.on('PWM6T', function (data) {
+    document.getElementById('PWM6').value = data;
+    var slider6 = document.getElementById("PWM6");
+    var output6 = document.getElementById("val6");
+    output6.innerHTML = slider6.value;
+    slider6.oninput = function () {
+        output6.innerHTML = this.value;
+    }
+});
+
+var slider13 = document.getElementById("PWM13");
+var output13 = document.getElementById("val13");
+socket.on('PWM13T', function (data) {
+    document.getElementById('PWM13').value = data;
+    var slider13 = document.getElementById("PWM13");
+    var output13 = document.getElementById("val13");
+    output13.innerHTML = slider13.value;
+    slider13.oninput = function () {
+        output13.innerHTML = this.value;
+    }
+});
+
+var slider22 = document.getElementById("PWM22");
+var output22 = document.getElementById("val22");
+socket.on('PWM22T', function (data) {
+    document.getElementById('PWM22').value = data;
+    var slider22 = document.getElementById("PWM22");
+    var output22 = document.getElementById("val22");
+    output22.innerHTML = slider22.value;
+    slider22.oninput = function () {
+        output22.innerHTML = this.value;
+    }
+});
+
+var slider27 = document.getElementById("PWM27");
+var output27 = document.getElementById("val27");
+socket.on('PWM27T', function (data) {
+    document.getElementById('PWM27').value = data;
+    var slider27 = document.getElementById("PWM27");
+    var output27 = document.getElementById("val27");
+    output27.innerHTML = slider27.value;
+    slider27.oninput = function () {
+        output27.innerHTML = this.value;
+    }
+});
+
+
+
+function PwmInput(e) {
+    if (e.target.id === "PWM6") {
+        socket.emit('PWM6', slider6.value);
+    } else if (e.target.id === "PWM13") {
+        socket.emit('PWM13', slider13.value);
+    } else if (e.target.id === "PWM22") {
+        socket.emit('PWM22', slider22.value);
+    } else if (e.target.id === "PWM27") {
+        socket.emit('PWM27', slider27.value);
+    }
+}
+
+
+// Send GPIO button toggle to server
+socket.on('GPIO6', function (data) {
+    const myJSON = JSON.stringify(data);
+    document.getElementById('GPIO6').checked = data;
+});
+
+socket.on('GPIO13', function (data) {
+    const myJSON = JSON.stringify(data);
+    document.getElementById('GPIO13').checked = data;
+});
+
+socket.on('GPIO22', function (data) {
+    const myJSON = JSON.stringify(data);
+    document.getElementById('GPIO22').checked = data;
+});
+
+socket.on('GPIO27', function (data) {
+    const myJSON = JSON.stringify(data);
+    document.getElementById('GPIO27').checked = data;
+});
+
+// When toggle button is clicked
+function ReportMouseDown(e) {
+    var y = e.target.previousElementSibling;
+    if (y !== null) var x = y.id;
+    if (x !== null) {
+        // Now we know that x is defined, we are good to go.
+        if (x === "GPIO6") {
+            socket.emit("GPIO6T");  // send GPIO button toggle to node.js server
         }
-
-        div.temp {
-            background-image: url('https://img.freepik.com/premium-photo/yellow-color-cloth-pattern-backgroundgold-silk-wave-texture-design-holidays-travel-summer-card-bannerlight-gradient-yellow-fabric-smooth-shape-colorfulabstract-luxury-golden-template-wallpaper_301927-710.jpg?w=1060');
-            background-repeat: no-repeat;
-            background-size: cover;
-            font-family: Bangna New;
-            border-radius: 20px;
-            height: 200px;
-            width: 280px;
-            justify-content: center;
-            margin-right: 20px;
-            padding: 40px;
-            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
-
+        else if (x === "GPIO13") {
+            socket.emit("GPIO13T");  // send GPIO button toggle to node.js server
         }
-
-        div.hum {
-            background-image: url('https://img.freepik.com/premium-photo/pure-clean-water-drop-white-background_262288-6540.jpg?w=996');
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: right;
-            font-family: Bangna New;
-            border-radius: 20px;
-            height: 200px;
-            width: 280px;
-            justify-content: center;
-            margin-left: 2px;
-            padding: 40px;
-            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
-
+        else if (x === "GPIO22") {
+            socket.emit("GPIO22T");  // send GPIO button toggle to node.js server
         }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
+        else if (x === "GPIO27") {
+            socket.emit("GPIO27T");  // send GPIO button toggle to node.js server
         }
+    }
 
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+    if (e.target.id === "GPIO6M") {
+        socket.emit("GPIO6", 1);
+        document.getElementById('GPIO6').checked = 1;
+    }
+    else if (e.target.id === "GPIO13M") {
+        socket.emit("GPIO13", 1);
+        document.getElementById('GPIO13').checked = 1;
+    }
+    else if (e.target.id === "GPIO22M") {
+        socket.emit("GPIO22", 1);
+        document.getElementById('GPIO22').checked = 1;
+    }
+    else if (e.target.id === "GPIO27M") {
+        socket.emit("GPIO27", 1);
+    }
+}
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #28B463;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 30px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-        input:checked+.slider {
-            background-color: #ccc;
-        }
-
-        input:focus+.slider {
-            box-shadow: 0 0 1px #ccc;
-        }
-
-        input:checked+.slider:before {
-            -webkit-transform: translateX(-26px);
-            -ms-transform: translateX(-26px);
-            transform: translateX(-26px);
-        }
-
-        .slider.round {
-            border-radius: 34px;
-        }
-
-        .slider.round:before {
-            border-radius: 50%;
-        }
-
-        body {
-            background-image: url('https://img.freepik.com/premium-photo/abstract-blur-pastel-colour_66899-257.jpg?w=996');
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-    </style>
-
-</head>
-
-<body style="height: 700px; display: grid; justify-content: center; align-items: center;">
-
-    <div>
-        <div style="display: flex; justify-content: center; margin-bottom: 10px;">
-            <div class="temp">
-                <h5><b>Temperature:</b></h5><br>
-                <h3 style="display: flex; justify-content: center; font-size: 45px;" class="temp_value"><b>24.5 </b></h3>
-                <h3 style="font-size: 35px; margin-left: 100%; margin-right: 50px;">C</h3>
-            </div>
-
-            <div class="hum">
-                <h5><b>Humidity:</b></h5><br>
-                <h3 style="display: flex; justify-content: center; font-size: 45px;" class="hum_value"><b>30.2 </b></h3>
-                <h3 style="font-size: 35px; margin-left: 100%; margin-right: 50px;">%</h3>
-            </div>
-        </div>
-
-        <div class="rgb">
-
-            <div style="height: 250px; display: grid; align-items: center;">
-                <H1 class="text-center mb-3 text-uppercase"><b>ห้อง 101</b></H1>
-
-                <div class="container" style="display: flex; width: 80%;">
-
-                    <div class="GpioContainer text-center" style="margin: auto; width: 100px; ">
-                        <h4 class="mb-2 text-uppercase"><b>LED 1</b></h4>
-                        <label class="switch">
-                            <input type="checkbox" id="GPIO6">
-                            <span class="slider round"></span>
-                    </div>
-
-                    <div class="GpioContainer text-center" style="margin: auto; width: 100px;">
-                        <h4 class="mb-2 text-uppercase"><b>LED 2</b></h4>
-                        <label class="switch">
-                            <input type="checkbox" id="GPIO13">
-                            <span class="slider round"></span>
-                    </div>
-
-                    <div class="GpioContainer text-center" style="margin: auto; width: 100px;">
-                        <h4 class="mb-2 text-uppercase"><b>LED 3</b></h4>
-                        <label class="switch">
-                            <input type="checkbox" id="GPIO22">
-                            <span class="slider round"></span>
-                    </div>
-
-                    <div class="GpioContainer text-center" style="margin: auto; width: 100px;">
-                        <h4 class="mb-2 text-uppercase"><b>LED 4</b></h4>
-                        <label class="switch">
-                            <input type="checkbox" id="GPIO27">
-                            <span class="slider round"></span>
-                    </div>
-
-                </div>
-
-                <div class="container">
-                    <a href="http://localhost:3000/" class="btn btn-danger mt-5"
-                        style=" display:block; margin-left:auto; margin-right:auto; width:30%; border-radius: 20px;"><b>BACK</b></a>
-                </div>
-            </div>
-
-
-            <script src="/socket.io/socket.io.js"></script>
-            <script src="main.js"></script>
-
-        </div>
-    </div>
-</body>
-
-</html>
